@@ -1,6 +1,7 @@
 import { WebSocket } from 'ws';
 import { Command } from './types.js';
 import { mouse, left, right, up, down, Point } from '@nut-tree/nut-js';
+import { drawRectangle, drawSquare } from './render.js';
 
 export const handleCommands = (cmdFromServer: string, ws: WebSocket): void => {
   const input = cmdFromServer.split(' ');
@@ -32,8 +33,24 @@ export const handleCommands = (cmdFromServer: string, ws: WebSocket): void => {
     case Command.MOUSE_POSITION:
       (async () => {
         const point: Point = await mouse.getPosition();
-        console.log(point.x, point.y);
         ws.send(`${Command.MOUSE_POSITION}_${point.x},${point.y}`);
+      })();
+      break;
+    case Command.DRAW_SQUARE:
+      const side: number = +input[1];
+      (async () => {
+        const point: Point = await mouse.getPosition();
+        await drawSquare(point, side);
+        ws.send(`${Command.DRAW_SQUARE}_${side}`);
+      })();
+      break;
+    case Command.DRAW_RECTANGLE:
+      const width: number = +input[1];
+      const hight: number = +input[2];
+      (async () => {
+        const point: Point = await mouse.getPosition();
+        await drawRectangle(point, width, hight);
+        ws.send(`${Command.DRAW_SQUARE}_${width}_${hight}`);
       })();
       break;
   }
