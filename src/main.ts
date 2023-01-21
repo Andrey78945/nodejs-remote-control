@@ -12,11 +12,11 @@ wss.on('connection', function connection(ws) {
   let mes = '';
   ws.on('message', function message(data) {
     mes = String(data);
-    console.log(mes);
-    //  ws.send(mes.split(' ').join('_'));
     handleCommands(mes, ws);
   });
 });
 console.log(`Start websoket server on the ${PORT} port!`);
 
-wss.on('close', () => wss.close()); //???
+process.on('SIGINT', () => {
+  wss.close(() => process.exit());
+});

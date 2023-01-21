@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws';
 import { Command } from './types.js';
 import { mouse, left, right, up, down, Point } from '@nut-tree/nut-js';
-import { drawRectangle, drawSquare } from './render.js';
+import { drawCircle, drawRectangle, drawSquare } from './render.js';
 
 export const handleCommands = (cmdFromServer: string, ws: WebSocket): void => {
   const input = cmdFromServer.split(' ');
@@ -51,6 +51,14 @@ export const handleCommands = (cmdFromServer: string, ws: WebSocket): void => {
         const point: Point = await mouse.getPosition();
         await drawRectangle(point, width, hight);
         ws.send(`${Command.DRAW_SQUARE}_${width}_${hight}`);
+      })();
+      break;
+    case Command.DRAW_CIRCLE:
+      const radius: number = +input[1];
+      (async () => {
+        const point: Point = await mouse.getPosition();
+        await drawCircle(point, radius);
+        ws.send(`${Command.DRAW_CIRCLE}_${radius}`);
       })();
       break;
   }

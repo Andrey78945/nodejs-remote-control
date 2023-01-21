@@ -9,3 +9,5 @@ export const enum Command {
   DRAW_SQUARE = 'draw_square',
   PRINT_SCREEN = 'prnt_scrn',
 }
+
+export const ROUND_PARTS = 900;
